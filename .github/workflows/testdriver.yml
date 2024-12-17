@@ -26,7 +26,7 @@ jobs:
             .\venv\Scripts\activate
             pip install -e '.[dev]'
             cd src/interface/web/
-            yarn install
+            yarn install --frozen-lockfile
             yarn dev
             Start-Process "C:/Program Files/Google/Chrome/Application/chrome.exe" -ArgumentList "--start-maximized", "--load-extension=$(pwd)/node_modules/dashcam-chrome/build", "http://localhost:3000"
             exit
