@@ -23,7 +23,7 @@ jobs:
             git clone https://github.com/testdriverai/khoj.git
             cd khoj
             python -m venv venv
-            . venv/bin/activate
+            .\venv\Scripts\activate
             pip install -e '.[dev]'
             cd src/interface/web/
             yarn install
