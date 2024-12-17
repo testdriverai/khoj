@@ -1,0 +1,36 @@
+name: TestDriver.ai
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: "TestDriver"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: testdriverai/action@main
+        with:
+          key: ${{secrets.TESTDRIVER_API_KEY}}
+          prompt: |
+            1. /run testdriver/test.yml
+          prerun: |
+            cd $env:TEMP
+            npm init -y
+            npm install dashcam-chrome
+            git clone https://github.com/testdriverai/khoj.git
+            cd khoj
+            python -m venv venv
+            . venv/bin/activate
+            pip install -e '.[dev]'
+            cd src/interface/web/
+            yarn install
+            yarn dev
+            Start-Process "C:/Program Files/Google/Chrome/Application/chrome.exe" -ArgumentList "--start-maximized", "--load-extension=$(pwd)/node_modules/dashcam-chrome/build", "http://localhost:3000"
+            exit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORCE_COLOR: "3"
+          WEBSITE_URL: "https://example.com" # Define the website URL here
